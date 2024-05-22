@@ -5,6 +5,7 @@ import pickle
 import numpy as np
 import time
 import matplotlib.pyplot as plt
+import fickling
 
 class QLearningLogger:
     """
@@ -98,7 +99,7 @@ class QLearningLogger:
             memory_path = self.save_path + "/logging_data/memory"
             
         with open(memory_path, 'rb') as file:
-            memory_dict = pickle.load(file)
+            memory_dict = fickling.load(file)
             memory.frames = memory_dict['frames']
             memory.actions = memory_dict['actions']
             memory.rewards = memory_dict['rewards']
@@ -110,15 +111,15 @@ class QLearningLogger:
         for value in ["losses", "q_values", "validation_scores", "training_scores", "durations"]:
             with open(self.save_path + "/logging_data/" + value, 'rb') as file:
                 if value == "losses":
-                    self.losses = pickle.load(file)
+                    self.losses = fickling.load(file)
                 elif value == "q_values":
-                    self.q_values = pickle.load(file)
+                    self.q_values = fickling.load(file)
                 elif value == "validation_scores":
-                    self.validation_scores = pickle.load(file)
+                    self.validation_scores = fickling.load(file)
                 elif value == "training_scores":
-                    self.training_scores = pickle.load(file)
+                    self.training_scores = fickling.load(file)
                 elif value == "durations":
-                    self.durations = pickle.load(file)
+                    self.durations = fickling.load(file)
     
     def save_all(self, model, memory, store_memory = False):
         self.save_logging_data()
