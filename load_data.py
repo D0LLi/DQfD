@@ -299,7 +299,7 @@ class LoadAtariHeadData:
                               priority_dtype = np.single,
                               batch_size = 32,
                               prio_coeff = 0.0,
-                              is_schedule = [0.4, 1.0, 5000000],
+                              is_schedule = None,
                               epsilon = 0.0001,
                               recompute_demonstrations = False,
                               only_highscore = False,
@@ -307,6 +307,7 @@ class LoadAtariHeadData:
                               frame_skip = 4):
         """Load demonstration data and return an instance of PrioritizedExperienceReplay,
         initialized with the demonstration data."""
+        is_schedule = [0.4, 1.0, 5000000] if is_schedule is None else is_schedule
         
         # get demonstrations
         frames, actions, rewards, episode_endings = self.get_demonstrations(frame_shape, recompute_demonstrations, only_highscore, exclude_highscore, frame_skip)

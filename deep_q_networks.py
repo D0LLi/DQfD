@@ -70,24 +70,13 @@ class DeepQNetwork:
     """
     
     def __init__(self, 
-                 conv_layers = {'filters': [32, 64, 64],#, 1024],
-                                'kernel_sizes': [8, 4, 3],#, 7],
-                                'strides': [4, 2, 1],#, 1],
-                                'paddings': ['valid' for _ in range(3)],
-                                'activations': ['relu' for _ in range(3)],
-                                'initializers': [initializers.VarianceScaling(scale = 2.0) for _ in range(3)],
-                                'names': ['conv_%i'%(i) for i in range(1,4)]
-                               },
-                 dense_layers = {'units': [512],
-                                 'activations': ['relu'],
-                                 'initializers': [initializers.VarianceScaling(scale = 2.0)],
-                                 'names': ['dense_1']},
+                 conv_layers = None,
+                 dense_layers = None,
                  in_shape = (4, 84, 84),
                  num_actions = 6,
                  dueling = True,
                  optimizer = Adam,
-                 lr_schedule = [[0.00025, 0.00005, 500000],
-                                [0.00005, 0.00001, 1000000]],              
+                 lr_schedule = None,              
                  one_step_loss_fn = Huber(reduction=tf.keras.losses.Reduction.NONE), #lambda x, y: tf.math.square(x - y),
                  n_step_loss_fn = Huber(reduction=tf.keras.losses.Reduction.NONE), #lambda x, y: tf.math.square(x - y),
                  expert_loss_fn = lambda x, y: tf.math.abs(x - y),
@@ -97,6 +86,20 @@ class DeepQNetwork:
                  l2_weight = 0.0,
                  large_margin_coeff = 0.8
                 ):
+        conv_layers = {'filters': [32, 64, 64],#, 1024],
+                                    'kernel_sizes': [8, 4, 3],#, 7],
+                                    'strides': [4, 2, 1],#, 1],
+                                    'paddings': ['valid' for _ in range(3)],
+                                    'activations': ['relu' for _ in range(3)],
+                                    'initializers': [initializers.VarianceScaling(scale = 2.0) for _ in range(3)],
+                                    'names': ['conv_%i'%(i) for i in range(1,4)]
+                                   } if conv_layers is None else conv_layers
+        dense_layers = {'units': [512],
+                                     'activations': ['relu'],
+                                     'initializers': [initializers.VarianceScaling(scale = 2.0)],
+                                     'names': ['dense_1']} if dense_layers is None else dense_layers
+        lr_schedule = [[0.00025, 0.00005, 500000],
+                                    [0.00005, 0.00001, 1000000]] if lr_schedule is None else lr_schedule
         
         # define training parameters
         self.num_actions = num_actions

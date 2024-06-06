@@ -503,8 +503,9 @@ class EpsilonAnnealingAgent(BaseQAgent):
                  save_path = None,
                  
                  num_actions = 4,
-                 eps_schedule = [[1.0, 0.1, 1000000],
-                                 [0.1, 0.001, 5000000]]):
+                 eps_schedule = None):
+        eps_schedule = [[1.0, 0.1, 1000000],
+                                     [0.1, 0.001, 5000000]] if eps_schedule is None else eps_schedule
         
         BaseQAgent.__init__(self, env, memory, policy_network, target_network, frame_shape, save_path)
         
@@ -579,9 +580,10 @@ class EpsAnnDQNAgent(EpsilonAnnealingAgent, DQNAgent):
                  prioritized_replay = False,
                 
                  num_actions = 4,
-                 eps_schedule = [[1.0, 0.1, 1000000],
-                                 [0.1, 0.001, 5000000]]
+                 eps_schedule = None
                  ):
+        eps_schedule = [[1.0, 0.1, 1000000],
+                                     [0.1, 0.001, 5000000]] if eps_schedule is None else eps_schedule
         
         EpsilonAnnealingAgent.__init__(self, env, memory, policy_network, target_network, frame_shape, save_path, num_actions, eps_schedule)
         DQNAgent.__init__(self, env, memory, policy_network, target_network, frame_shape, save_path, discount_factor, n_step, double_q, expert_memory, prioritized_replay)
